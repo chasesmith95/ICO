@@ -9,33 +9,44 @@ pragma solidity ^0.4.15;
 
 contract Queue {
 	/* State variables */
-	uint8 size = 5;
-	// YOUR CODE HERE
+	uint8 size = 0;
+	address[] addressList;
+	mapping (address => uint) startTimes;
+	mapping (address => uint) indices;
+	uint front = 0;
+	uint back = 0;
 
 	/* Add events */
 	// YOUR CODE HERE
 
 	/* Add constructor */
-	// YOUR CODE HERE
+	function Queue() {
+
+	}
 
 	/* Returns the number of people waiting in line */
 	function qsize() constant returns(uint8) {
-		// YOUR CODE HERE
+		return size;
 	}
 
 	/* Returns whether the queue is empty or not */
 	function empty() constant returns(bool) {
-		// YOUR CODE HERE
+		if (size == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/* Returns the address of the person in the front of the queue */
 	function getFirst() constant returns(address) {
-		// YOUR CODE HERE
+		return addressList[front];
 	}
 	
 	/* Allows `msg.sender` to check their position in the queue */
 	function checkPlace() constant returns(uint8) {
-		// YOUR CODE HERE
+		return indices[msg.sender] - front;
+		
 	}
 	
 	/* Allows anyone to expel the first person in line if their time
@@ -49,11 +60,33 @@ contract Queue {
 	 * they are done with their purchase
 	 */
 	function dequeue() {
-		// YOUR CODE HERE
-	}
+	    if(size == 0) {
+	      return "Queue is currently empty";
+	    }
+
+	    if (addressList[front] == msg.sender) {
+	    	delete addressList[front];
+	    	front += 1;
+	    	size -= 1;
+	    }
+
+	    if () { //time is up
+	    	delete addressList[front];
+	    	front += 1;
+	    	size -= 1;
+	    }
+	    
+	    
+		}
 
 	/* Places `addr` in the first empty position in the queue */
-	function enqueue(address addr) {
-		// YOUR CODE HERE
+	function enqueue(address addr) returns (string) {
+		if(size == 5) {
+			return "Queue is currently full";
+		}
+    back += 1;
+    addressList[back] = addr;
+    indices[addr] = back
+    size += 1;
 	}
 }
