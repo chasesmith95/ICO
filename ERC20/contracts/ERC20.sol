@@ -8,22 +8,22 @@ import "./ConvertLib.sol";
 // token, see: https://github.com/ConsenSys/Tokens. Cheers!
 
 contract ERC20 {
-			uint totalSupply = 100;
+	uint totalSupply = 100;
 
- 3     function totalSupply() constant returns (uint totalSupply);
+	function totalSupply() constant returns (uint totalSupply);
 
- 4     function balanceOf(address _owner) constant returns (uint balance);
+    function balanceOf(address _owner) constant returns (uint balance);
 
- 5     function transfer(address _to, uint _value) returns (bool success);
+ 	function transfer(address _to, uint _value) returns (bool success);
 
- 6     function transferFrom(address _from, address _to, uint _value) returns (bool success);
+ 	function transferFrom(address _from, address _to, uint _value) returns (bool success);
 
- 7     function approve(address _spender, uint _value) returns (bool success);
+	function approve(address _spender, uint _value) returns (bool success);
 
- 8     function allowance(address _owner, address _spender) constant returns (uint remaining);
+	function allowance(address _owner, address _spender) constant returns (uint remaining);
 
- 9     event Transfer(address indexed _from, address indexed _to, uint _value);
+	event Transfer(address indexed _from, address indexed _to, uint _value);
 
-10     event Approval(address indexed _owner, address indexed _spender, uint _value);
+	event Approval(address indexed _owner, address indexed _spender, uint _value);
 
 11 }
