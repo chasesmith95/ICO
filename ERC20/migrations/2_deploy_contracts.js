@@ -1,8 +1,9 @@
-var ConvertLib = artifacts.require("./ConvertLib.sol");
-var MetaCoin = artifacts.require("./MetaCoin.sol");
+var Crowdsale = artifacts.require("./Crowdsale.sol");
+var Queue = artifacts.require("./Queue.sol");
+var Token = artifacts.require("./Token.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(ConvertLib);
-  deployer.link(ConvertLib, MetaCoin);
-  deployer.deploy(MetaCoin);
+	deployer.deploy(Crowdsale);
+	deployer.deploy(Queue);
+	deployer.deploy(Token);
 };
