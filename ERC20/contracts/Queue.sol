@@ -44,7 +44,7 @@ contract Queue {
 	}
 	
 	/* Allows `msg.sender` to check their position in the queue */
-	function checkPlace() constant returns(uint8) {
+	function checkPlace() constant returns(uint256) {
 		return indices[msg.sender] - front;
 		
 	}
@@ -52,29 +52,44 @@ contract Queue {
 	/* Allows anyone to expel the first person in line if their time
 	 * limit is up
 	 */
-	function checkTime() {
-		// YOUR CODE HERE
+	function checkTime() returns (string) {
+		if(size == 0) {
+		    return "Queue is currently empty";
+		}
+		
+	    if (now - startTimes[addressList[front]] > 300) { //time is up
+	    	delete addressList[front];
+	    	front += 1;
+	    	size -= 1;
+	    	return "First person in line has been removed";
+	    }
+	    
+	    return "Cannot remove first person in line";
 	}
 	
 	/* Removes the first person in line; either when their time is up or when
 	 * they are done with their purchase
 	 */
-	function dequeue() {
+	function dequeue() returns (string) {
 	    if(size == 0) {
-	      return "Queue is currently empty";
+	        return "Queue is currently empty";
 	    }
 
 	    if (addressList[front] == msg.sender) {
 	    	delete addressList[front];
 	    	front += 1;
 	    	size -= 1;
+	    	return "Successfully left queue";
 	    }
 
-	    if () { //time is up
+	    if (now - startTimes[addressList[front]] > 300) { //time is up
 	    	delete addressList[front];
 	    	front += 1;
 	    	size -= 1;
+	    	return "First person in line has been removed";
 	    }
+	    
+	    return "Cannot remove first person in line";
 	    
 	    
 		}
@@ -84,9 +99,15 @@ contract Queue {
 		if(size == 5) {
 			return "Queue is currently full";
 		}
-    back += 1;
-    addressList[back] = addr;
-    indices[addr] = back
-    size += 1;
+	    back += 1;
+	    addressList[back] = addr;
+	    indices[addr] = back;
+	    startTimes[addr] = now;
+	    size += 1;
+	    return "Successfully added to queue";
+	}
+
+	function getNow() returns (uint) {
+		return now;
 	}
 }
