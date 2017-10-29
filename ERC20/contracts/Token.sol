@@ -17,15 +17,22 @@ contract Token is ERC20Interface {
 		return totalSupply;
 	}
 
-    function balanceOf(address _owner) constant returns (uint balance) {
+  function balanceOf(address _owner) constant returns (uint balance) {
     	return balances[_owner];
-    }
+  }
 
  	function transfer(address _to, uint _value) returns (bool success) {
- 		
+		return transferFrom(msg.sender, _to, _value);
  	}
 
- 	function transferFrom(address _from, address _to, uint _value) returns (bool success);
+ 	function transferFrom(address _from, address _to, uint _value) returns (bool success) {
+		if (balanceOf(_from) >= _value) {
+			balance[_from] -= _value;
+			balance[_to] += _value;
+			return true;
+		}
+		return false;
+	}
 
 	function approve(address _spender, uint _value) returns (bool success);
 
@@ -34,5 +41,4 @@ contract Token is ERC20Interface {
 	event Transfer(address indexed _from, address indexed _to, uint _value);
 
 	event Approval(address indexed _owner, address indexed _spender, uint _value);
-
-11 }
+ }
