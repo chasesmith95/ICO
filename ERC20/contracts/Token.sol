@@ -10,9 +10,14 @@ import './interfaces/ERC20Interface.sol';
 
 contract Token is ERC20Interface {
 
-	uint totalSupply = 100;
+	uint totalSupply;
 	mapping (address => uint) public balances;
 	mapping (address => mapping (address => uint256)) approved;
+
+	function Token(uint _totalSupply) {
+		totalSupply = _totalSupply;
+		balances[msg.sender] = totalSupply;
+	}
 
 	function totalSupply() constant returns (uint totalSupply) {
 		return totalSupply;
@@ -21,6 +26,13 @@ contract Token is ERC20Interface {
   function balanceOf(address _owner) constant returns (uint balance) {
     return balances[_owner];
   }
+
+	function burnTokens(uint _value) returns (bool success) {
+		if (balanceOf(msg.sender) > _value && _value > 0) {
+			balance[msg.sender] -= _value;
+			return true;
+		}
+	}
 
  	function transfer(address _to, uint _value) returns (bool success) {
 		return transferFrom(msg.sender, _to, _value);
