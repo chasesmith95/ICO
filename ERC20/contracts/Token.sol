@@ -12,13 +12,14 @@ contract Token is ERC20Interface {
 
 	uint totalSupply = 100;
 	mapping (address => uint) public balances;
+	mapping (address => mapping (address => uint256)) approved;
 
 	function totalSupply() constant returns (uint totalSupply) {
 		return totalSupply;
 	}
 
   function balanceOf(address _owner) constant returns (uint balance) {
-    	return balances[_owner];
+    return balances[_owner];
   }
 
  	function transfer(address _to, uint _value) returns (bool success) {
@@ -29,14 +30,22 @@ contract Token is ERC20Interface {
 		if (balanceOf(_from) >= _value) {
 			balance[_from] -= _value;
 			balance[_to] += _value;
+			Transfer(_from, _to, _value);
 			return true;
 		}
-		return false;
 	}
 
-	function approve(address _spender, uint _value) returns (bool success);
+	function approve(address _spender, uint _value) returns (bool success) {
+		if (balanceOf(msg.sender) >= _value) {
+			approved[msg.sender][_spender] = _value;
+			Approval(_owner, _spender, _value);
+			return true;
+		}
+	}
 
-	function allowance(address _owner, address _spender) constant returns (uint remaining);
+	function allowance(address _owner, address _spender) constant returns (uint remaining) {
+		return allowed[_owner][_spender];
+	}
 
 	event Transfer(address indexed _from, address indexed _to, uint _value);
 
