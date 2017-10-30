@@ -11,7 +11,7 @@ import './Token.sol';
 
 contract Crowdsale {
 	// YOUR CODE HERE
-  address owner;
+  address public owner;
   Token public token;
   Queue public queue;
   //addresses
@@ -86,26 +86,6 @@ contract Crowdsale {
     }
     return valid;
   }
-
-  // function getInLine() {
-  //   queue.enqueue(msg.sender);
-  // }
-
-  // function checkPlaceInLine() returns (uint8) {
-  //   return queue.checkPlace();
-  // }
-
-  // function checkFront() returns (address) {
-  //   return queue.getFirst();
-  // }
-
-  // function checkTime() {
-  //   queue.checkTime();
-  // }
-
-
-  modifier isOwner(address _owner) {require(owner == _owner); _;}
-  //set start and end time in a time cap
 
 //Events //
   event TokenPurchase(address _to, uint _value, bool success);
