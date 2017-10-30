@@ -11,19 +11,15 @@ import './utils/SafeMath.sol';
 
 contract Token is ERC20Interface {
 
-	uint totalSupply;
+	uint256 public totalSupply;
 	mapping (address => uint) public balances;
 	mapping (address => mapping (address => uint256)) approved;
 	using SafeMath for uint256;
 	address ownerOfToken;
 
-	function Token(uint _totalSupply) {
+	function Token(uint256 _totalSupply) {
 		totalSupply = _totalSupply;
-		balances[msg.sender] = totalSupply;
-	}
-
-	function totalSupply() constant returns (uint totalSupply) {
-		return totalSupply;
+		balances[msg.sender] += totalSupply;
 	}
 
   function balanceOf(address _owner) constant returns (uint balance) {
