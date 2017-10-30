@@ -20,8 +20,8 @@ contract Queue {
 	// YOUR CODE HERE
 
 	/* Add constructor */
-	function Queue() payable {
-		addressList = new address[](5);
+	function Queue() {
+		addressList = new address[](size);
 	}
 
 	/* Returns the number of people waiting in line */
@@ -96,7 +96,7 @@ contract Queue {
 			return "Queue is currently full";
 		}
 	    back += 1;
-	    addressList[back] = addr;
+	    addressList.push(addr);
 	    indices[addr] = back;
 	    startTimes[addr] = now;
 	    size += 1;
