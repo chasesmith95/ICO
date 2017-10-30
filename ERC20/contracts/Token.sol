@@ -36,6 +36,7 @@ contract Token is ERC20Interface {
 		if (balanceOf(msg.sender) >= _value && _value > 0) {
 			totalSupply -= _value;
 			balances[msg.sender] -= _value;
+			Burn(msg.sender, _value);
 			return true;
 		}
 	}
@@ -64,6 +65,8 @@ contract Token is ERC20Interface {
 	function allowance(address _owner, address _spender) constant returns (uint remaining) {
 		return approved[_owner][_spender];
 	}
+
+	event Burn(address _burner, uint _value);
 
 	event Transfer(address indexed _from, address indexed _to, uint _value);
 
