@@ -19,7 +19,7 @@ contract Token is ERC20Interface {
 
 	function Token(uint256 _totalSupply) {
 		totalSupply = _totalSupply;
-		balances[msg.sender] = safeAdd(balances[msg.sender], totalSupply);
+		balances[msg.sender] = SafeMath.add(balances[msg.sender], totalSupply);
 	}
 
   function balanceOf(address _owner) constant returns (uint balance) {
@@ -28,14 +28,14 @@ contract Token is ERC20Interface {
 
   function mint(address _buyer, uint256 _addSupply) {
 	  require (buyer != _ownerOfToken && msg.sender == _ownerOfToken);
-	  totalSupply = safeAdd(totalSupply, _addSupply);
-	  balances[_buyer] = safeAdd(balances[_buyer], _addSupply);
+	  totalSupply = SafeMath.add(totalSupply, _addSupply);
+	  balances[_buyer] = SafeMath.add(balances[_buyer], _addSupply);
   }
 
 	function burnTokens(uint _value) returns (bool success) {
 		if (balanceOf(msg.sender) >= _value && _value > 0) {
-			totalSupply = safeSub(totalSupply, _value);
-			balances[msg.sender] = safeSub(balances[msg.sender], _value);
+			totalSupply = SafeMath.sub(totalSupply, _value);
+			balances[msg.sender] = SafeMath.sub(balances[msg.sender], _value);
 			Burn(msg.sender, _value);
 			return true;
 		}
@@ -47,8 +47,8 @@ contract Token is ERC20Interface {
 
  	function transferFrom(address _from, address _to, uint _value) returns (bool success) {
 		if (balanceOf(_from) >= _value) {
-			balances[_from] = safeSub(balances[_from], _value);
-			balances[_to] = safeAdd(balances[_to], _value);
+			balances[_from] = SafeMath.sub(balances[_from], _value);
+			balances[_to] = SafeMath.add(balances[_to], _value);
 			Transfer(_from, _to, _value);
 			return true;
 		}
