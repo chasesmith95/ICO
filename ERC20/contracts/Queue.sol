@@ -21,7 +21,7 @@ contract Queue {
 
 	/* Add constructor */
 	function Queue() {
-
+		addressList = new address[](size);
 	}
 
 	/* Returns the number of people waiting in line */

@@ -22,13 +22,14 @@ contract Crowdsale {
 
 
   //Owner Functions //
-  function CrowdSale(uint256 saleStartTime, uint256 saleEndTime, address _owner, uint256 maxTime) {
-    require(saleStartTime >= block.number &&
-    saleEndTime > saleStartTime && msg.sender);
+  function CrowdSale(uint256 timeLimit, uint256 supply) {
+    require(timeLimit > 0);
     owner = msg.sender;
-    uint _totalSupply = msg.value;
+    token = new Token(supply);
     //deploy the token
-    token = Token(msg.value);
+    startSale = now;
+    endSale = SafeMath.add(startSale, timeLimit);
+    quueue = new Queue();
   }
 
 
