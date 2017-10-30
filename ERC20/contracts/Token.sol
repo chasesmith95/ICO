@@ -19,7 +19,7 @@ contract Token is ERC20Interface {
 
 	function Token(uint256 _totalSupply) {
 		totalSupply = _totalSupply;
-		balances[msg.sender] += totalSupply;
+		balances[msg.sender] = SafeMath.add(balances[msg.sender], totalSupply);
 	}
 
   	function balanceOf(address _owner) constant returns (uint balance) {
@@ -34,8 +34,9 @@ contract Token is ERC20Interface {
   
 	function burnTokens(uint _value) returns (bool success) {
 		if (balanceOf(msg.sender) >= _value && _value > 0) {
-			totalSupply -= _value;
-			balances[msg.sender] -= _value;
+			totalSupply = SafeMath.sub(totalSupply, _value);
+			balances[msg.sender] = SafeMath.sub(balances[msg.sender], _value);
+			Burn(msg.sender, _value);
 			return true;
 			}
 	}
@@ -54,8 +55,8 @@ contract Token is ERC20Interface {
 	  
 	function transferFrom(address _from, address _to, uint _value) returns (bool success) {
 		if (balanceOf(_from) >= _value) {
-			balances[_from] -= _value;
-			balances[_to] += _value;
+			balances[_from] = SafeMath.sub(balances[_from], _value);
+			balances[_to] = SafeMath.add(balances[_to], _value);
 			Transfer(_from, _to, _value);
 			return true;
 		}
@@ -72,6 +73,8 @@ contract Token is ERC20Interface {
 	function allowance(address _owner, address _spender) constant returns (uint remaining) {
 		return approved[_owner][_spender];
 	}
+
+	event Burn(address _burner, uint _value);
 
 	event Transfer(address indexed _from, address indexed _to, uint _value);
 
