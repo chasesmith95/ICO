@@ -31,11 +31,7 @@ contract Queue {
 
 	/* Returns whether the queue is empty or not */
 	function empty() constant returns(bool) {
-		if (size == 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return (size == 0);
 	}
 	
 	/* Returns the address of the person in the front of the queue */
