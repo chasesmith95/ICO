@@ -12,13 +12,19 @@ import './Token.sol';
 contract Crowdsale {
 	// YOUR CODE HERE
   address owner;
-  Token token;
+  Token public token;
+  Queue public queue;
   //addresses
   //uint price;
+  using SafeMath for uint256;
+  uint256 public startSale;
+  uint256 public endSale;
 
 
   //Owner Functions //
-  function CrowdSale() {
+  function CrowdSale(uint256 saleStartTime, uint256 saleEndTime, address _owner, uint256 maxTime) {
+    require(saleStartTime >= block.number &&
+    saleEndTime > saleStartTime && msg.sender);
     owner = msg.sender;
     uint _totalSupply = msg.value;
     //deploy the token
@@ -67,8 +73,8 @@ contract Crowdsale {
 
 
 //Events //
-  event Purchase(address _to, uint _value);
+  event TokenPurchase(address _to, uint _value);
 
-  event Refund(address _to, uint _value);
+  event TokenRefund(address _to, uint _value);
 
 }
