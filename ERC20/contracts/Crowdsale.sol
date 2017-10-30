@@ -19,19 +19,51 @@ contract Crowdsale {
   using SafeMath for uint256;
   uint256 public startSale;
   uint256 public endSale;
+  uint256 public rate;
 
 
   //Owner Functions //
-  function CrowdSale(uint256 timeLimit, uint256 supply) {
+  function CrowdSale(uint256 timeLimit, uint256 supply, uint256 _rate) {
     require(timeLimit > 0);
     owner = msg.sender;
     token = new Token(supply);
     //deploy the token
     startSale = now;
     endSale = SafeMath.add(startSale, timeLimit);
+    rate = _rate;
     quueue = new Queue();
   }
 
+  function mint(uint256 numTokens) {
+    require(msg.sender == owner);
+    token.mint(numTokens);
+  }
+
+  function burn(uint256 numTokens) returns (bool) {
+    require(msg.sender == owner);
+    return token.burn(numTokens);
+  }
+
+  function buyTokens() payable returns (bool) {
+    require(now <= startSale);
+    
+  }
+
+  // function getInLine() {
+  //   queue.enqueue(msg.sender);
+  // }
+
+  // function checkPlaceInLine() returns (uint8) {
+  //   return queue.checkPlace();
+  // }
+
+  // function checkFront() returns (address) {
+  //   return queue.getFirst();
+  // }
+
+  // function checkTime() {
+  //   queue.checkTime();
+  // }
 
 
   modifier isOwner(address _owner) {require(owner == _owner); _;}

@@ -26,10 +26,10 @@ contract Token is ERC20Interface {
     return balances[_owner];
   }
 
-  function mint(address buyer, uint256 addSupply) {
-	  require (buyer != ownerOfToken);
-	  totalSupply += addSupply;
-	  balances[buyer] += addSupply;
+  function mint(uint256 addSupply) {
+	  require (msg.sender == ownerOfToken);
+	  totalSupply = SafeMath.add(totalSupply, addSupply);
+	  balances[msg.sender] = SafeMath.add(balances[msg.sender], addSupply);
   }
 
 	function burnTokens(uint _value) returns (bool success) {
