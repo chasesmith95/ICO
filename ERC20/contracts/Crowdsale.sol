@@ -78,6 +78,15 @@ contract Crowdsale {
     return valid;
   }
 
+  function getFunds() returns (bool) {
+    require(msg.sender == owner);
+    bool valid = owner.send(fundsRaised);
+    if (valid) {
+      fundsRaised = 0;
+    }
+    return valid;
+  }
+
   // function getInLine() {
   //   queue.enqueue(msg.sender);
   // }
