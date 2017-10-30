@@ -20,6 +20,8 @@ contract Crowdsale {
   uint256 public startSale;
   uint256 public endSale;
   uint256 public rate;
+  uint256 public fundsRaised;
+  uint256 public tokensSold;
 
 
   //Owner Functions //
@@ -31,7 +33,9 @@ contract Crowdsale {
     startSale = now;
     endSale = SafeMath.add(startSale, timeLimit);
     rate = _rate;
-    quueue = new Queue();
+    queue = new Queue();
+    tokensSold = 0;
+    fundsRaised = 0;
   }
 
   function mint(uint256 numTokens) {
@@ -41,12 +45,37 @@ contract Crowdsale {
 
   function burn(uint256 numTokens) returns (bool) {
     require(msg.sender == owner);
-    return token.burn(numTokens);
+    return token.burnTokens(numTokens);
   }
 
   function buyTokens() payable returns (bool) {
     require(now <= startSale);
-    
+    uint256 numTokens = SafeMath.mul(msg.value, rate);
+    if (token.totalSupply() >= numTokens && queue.getFirst() == msg.sender && queue.qsize() > 1) {
+      bool valid = token.transfer(msg.sender, numTokens);
+      if (valid) {
+        tokensSold = SafeMath.add(tokensSold, numTokens);
+        fundsRaised = SafeMath.add(fundsRaised, msg.value);
+      }
+      TokenPurchase(msg.sender, msg.value, valid);
+      return valid;
+    }
+    return false;
+  }
+
+  function refund(uint256 amnt) returns (bool) {
+    require(now <= startSale);
+    bool valid = token.transfer(msg.sender, amnt);
+    if (valid) {
+      tokensSold = SafeMath.sub(tokensSold, amnt);
+      uint256 numWei = SafeMath.div(amnt, rate);
+      valid = msg.sender.send(numWei);
+      if (valid) {
+        fundsRaised = SafeMath.sub(fundsRaised, numWei);
+      }
+    }
+    TokenRefund(msg.sender, msg.value, valid);
+    return valid;
   }
 
   // function getInLine() {
@@ -69,45 +98,9 @@ contract Crowdsale {
   modifier isOwner(address _owner) {require(owner == _owner); _;}
   //set start and end time in a time cap
 
-
-  function setTimeCap(start, end) isOwner(msg.sender);
-  //Unknown how to do this
-
-  //Token Supply Issues //
-    //initialize token supply
-
-    //be able to mint new tokens
-
-  //set price
-  function setPrice(uint _price) isOwner(msg.sender) {
-    if (_price > 0) {
-      price = _price;
-    }
-  }
-
-  //Burn Tokens not yet Sold //
-    //be able to burn tokens not yet sold (subtract from totalSupply)
-  function Burn() isOwner(msg.sender);
-
-
-  //Buyer Functions //
-
-  function Purchase(uint _value) returns (bool success);
-
-  function Refund(uint _value) returns (bool success);
-
-
-
-
-
-  //Ending Functions //
-
-    //must give all funds to the owner at the end of the sale
-
-
 //Events //
-  event TokenPurchase(address _to, uint _value);
+  event TokenPurchase(address _to, uint _value, bool success);
 
-  event TokenRefund(address _to, uint _value);
+  event TokenRefund(address _to, uint _value, bool success);
 
 }
