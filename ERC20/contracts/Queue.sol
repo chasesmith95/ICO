@@ -20,8 +20,8 @@ contract Queue {
 	// YOUR CODE HERE
 
 	/* Add constructor */
-	function Queue() {
-		addressList = new address[](size);
+	function Queue() payable {
+		addressList = new address[](5);
 	}
 
 	/* Returns the number of people waiting in line */
